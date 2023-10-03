@@ -18,15 +18,18 @@ public class program4 {
    */
   public static void main(String[] args) {
     String file = "car_sales_data.csv";
-    long startTime = System.currentTimeMillis();
 
     try {
+      long startReadTime = System.currentTimeMillis();
       List<SaleRecord> saleRecords = read(file);
-      int brokenDeals = processSaleRecords(saleRecords, 5);
+      long endReadTime = System.currentTimeMillis();
+      long startTime = System.currentTimeMillis();
+      int brokenDeals = calculateBreaks(saleRecords, 5);
       long endTime = System.currentTimeMillis();
 
       System.out.println(brokenDeals + " deals were broken");
       System.out.println((double) (endTime - startTime) / 1000 + " seconds to simulate the process");
+      System.out.println((double) (endReadTime - startReadTime) / 1000 + " seconds to read the file");
     } catch (IOException | ParseException e) {
       e.printStackTrace();
     }
@@ -83,10 +86,10 @@ Reads the CSV file and parses its contents into a list of SaleRecords.
   /*
    Processes the sale records and calculates the number of broken deals.
    @param saleRecords  A list of SaleRecord objects.
-   @param numCounters  The number of counters available for processing.
+   @param nCounters  The number of counters available for processing.
    @return The number of broken deals.
    */
-  public static int processSaleRecords(List<SaleRecord> saleRecords, int numCounters) {
+  public static int calculateBreaks(List<SaleRecord> saleRecords, int nCounters) {
     Collections.sort(saleRecords, new Comparator<SaleRecord>() {
       @Override
       public int compare(SaleRecord o1, SaleRecord o2) {
@@ -94,38 +97,38 @@ Reads the CSV file and parses its contents into a list of SaleRecords.
       }
     });
 
-    int minutesInDay = 1440;
+    int workTimeCounters = 1440;
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     Date currentDate = null;
-    int totalProcessingTime = 0;
+    int processingTimeRecords = 0;
     Queue<SaleRecord> queue = new LinkedList<>();
     int brokenDeals = 0;
 
     for (SaleRecord saleRecord : saleRecords) {
-      Date saleDate = saleRecord.getDate();
-      if (currentDate == null || !dateFormat.format(currentDate).equals(dateFormat.format(saleDate))) {
-        currentDate = saleDate;
-        totalProcessingTime = 0;
+      Date dateSale = saleRecord.getDate();
+      if (currentDate == null || !dateFormat.format(currentDate).equals(dateFormat.format(dateSale))) {
+        currentDate = dateSale;
+        processingTimeRecords = 0;
       }
 
-      int maxProcessingTime = numCounters * minutesInDay;
+      int maxProcessingTime = nCounters * workTimeCounters;
 
-      if (totalProcessingTime + saleRecord.getProcessingTime() <= maxProcessingTime) {
+      if (processingTimeRecords + saleRecord.getProcessingTime() <= maxProcessingTime) {
         queue.add(saleRecord);
-        totalProcessingTime += saleRecord.getProcessingTime();
+        processingTimeRecords += saleRecord.getProcessingTime();
       } else {
         brokenDeals++;
       }
     }
 
     while (!queue.isEmpty()) {
-      int counters = Math.min(numCounters, queue.size());
+      int counters = Math.min(nCounters, queue.size());
       for (int i = 0; i < counters; i++) {
         SaleRecord record = queue.poll();
-        totalProcessingTime -= record.getProcessingTime();
+        processingTimeRecords -= record.getProcessingTime();
       }
-      if (totalProcessingTime > 0) {
-        totalProcessingTime -= minutesInDay;
+      if (processingTimeRecords > 0) {
+        processingTimeRecords -= workTimeCounters;
       }
     }
 
