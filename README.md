@@ -19,4 +19,5 @@ To run the program, follow these steps:
 1. Compile the Java source file:
    '''bash
    javac program4.java
-3. java program4 <csv_file>
+   '''
+2. java program4 <csv_file>
