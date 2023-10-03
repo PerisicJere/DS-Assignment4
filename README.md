@@ -17,5 +17,6 @@ This program reads a CSV file containing car sales data and calculates the numbe
 To run the program, follow these steps:
 
 1. Compile the Java source file:
+   '''bash
    javac program4.java
-2. java program4 <csv_file>
+3. java program4 <csv_file>
