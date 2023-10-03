@@ -17,14 +17,14 @@ public class program4 {
    @param args Command-line arguments (not used in this program).
    */
   public static void main(String[] args) {
-    String file = "car_sales_data.csv";
+    String file = args[0];
 
     try {
       long startReadTime = System.currentTimeMillis();
       List<SaleRecord> saleRecords = read(file);
       long endReadTime = System.currentTimeMillis();
       long startTime = System.currentTimeMillis();
-      int brokenDeals = calculateBreaks(saleRecords, 5);
+      int brokenDeals = calculateBreaks(saleRecords, 11);
       long endTime = System.currentTimeMillis();
 
       System.out.println(brokenDeals + " deals were broken");
