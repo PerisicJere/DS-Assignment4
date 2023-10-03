@@ -1,5 +1,7 @@
+import java.util.Date;
+
 class SaleRecord {
-    String date;
+    Date date;
     String salesperson;
     String customerName;
     String carMake;
@@ -12,7 +14,7 @@ class SaleRecord {
 
 
 
-    public SaleRecord(String date, String salesperson, String customerName, String carMake, String carModel, int carYear, double salePrice, double commissionRate, double commissionEarned) {
+    public SaleRecord(Date date, String salesperson, String customerName, String carMake, String carModel, int carYear, double salePrice, double commissionRate, double commissionEarned) {
         this.date = date;
         this.salesperson = salesperson;
         this.customerName = customerName;
@@ -23,11 +25,11 @@ class SaleRecord {
         this.commissionRate = commissionRate;
         this.commissionEarned = commissionEarned;
     }
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
@@ -93,5 +95,14 @@ class SaleRecord {
 
     public void setCommissionEarned(double commissionEarned) {
         this.commissionEarned = commissionEarned;
+    }
+    public int getProcessingTime() {
+        if (commissionRate >= 0.06 && commissionRate < 0.09) {
+            return 3;
+        } else if (commissionRate >= 0.09) {
+            return 2;
+        } else {
+            return 1;
+        }
     }
 }
